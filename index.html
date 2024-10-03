@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación de Números</title>
+</head>
+<body>
+    <h1>Determina el número menor y verifica si hay números duplicados</h1>
+    <form id="numberForm">
+        <label for="firstNumber">Primer Número:</label>
+        <input type="number" id="firstNumber" required><br><br>
+
+        <label for="secondNumber">Segundo Número:</label>
+        <input type="number" id="secondNumber" required><br><br>
+
+        <label for="thirdNumber">Tercer Número:</label>
+        <input type="number" id="thirdNumber" required><br><br>
+
+        <button type="submit">Verificar</button>
+    </form>
+
+    <h3 id="output"></h3>
+
+    <script>
+        document.getElementById('numberForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const firstNumber = parseInt(document.getElementById('firstNumber').value);
+            const secondNumber = parseInt(document.getElementById('secondNumber').value);
+            const thirdNumber = parseInt(document.getElementById('thirdNumber').value);
+
+            // Función para obtener el número menor
+            const getSmallest = (a, b, c) => 
+                new Promise((resolve) => {
+                    const smallest = Math.min(a, b, c);
+                    resolve(smallest);
+                });
+
+            // Función para verificar si hay números repetidos
+            const checkDuplicates = (a, b, c) => 
+                new Promise((resolve) => {
+                    const duplicate = (a === b || a === c) ? a : (b === c ? b : null);
+                    resolve(duplicate);
+                });
+
+            // Ejecutar ambas promesas
+            Promise.all([getSmallest(firstNumber, secondNumber, thirdNumber), checkDuplicates(firstNumber, secondNumber, thirdNumber)])
+                .then(([smallest, duplicate]) => {
+                    const output = document.getElementById('output');
+                    output.innerHTML = `El número menor es: ${smallest}.<br>`;
+                    output.innerHTML += duplicate !== null 
+                        ? `Hay un número repetido: ${duplicate}.` 
+                        : 'No hay números repetidos.';
+                });
+        });
+    </script>
+</body>
+</html>
